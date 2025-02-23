@@ -7,6 +7,7 @@ import { ExamCreator } from './components/exam/ExamCreator'
 import { EvaluationCreator } from './components/evaluation/EvaluationCreator'
 import { EvaluationResult } from './components/evaluation/EvaluationResult'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
+import { ExamDetails } from './components/exam/examDetails'
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuth()
@@ -50,6 +51,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <EvaluationResult />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/created-exam"
+              element={
+                <PrivateRoute>
+                  <ExamDetails/>
                 </PrivateRoute>
               }
             />

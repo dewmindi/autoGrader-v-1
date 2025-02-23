@@ -13,18 +13,20 @@ interface Exam {
   id: string
   title: string
   subjectId: string
+  subject: String
   date: string
   totalQuestions: number
+  answer: String
 }
 
 export function Dashboard() {
-  const [subjects, setSubjects] = useState<Subject[]>([])
+  const [subject, setSubjects] = useState<Subject[]>([])
   const [exams, setExams] = useState<Exam[]>([])
   const navigate = useNavigate()
 
   useEffect(() => {
     // Load subjects and exams from localStorage
-    const storedSubjects = JSON.parse(localStorage.getItem('subjects') || '[]')
+    const storedSubjects = JSON.parse(localStorage.getItem('subject') || '[]')
     const storedExams = JSON.parse(localStorage.getItem('exams') || '[]')
     setSubjects(storedSubjects)
     setExams(storedExams)
@@ -32,6 +34,11 @@ export function Dashboard() {
 
   const handleCreateExam = () => {
     navigate('/create-exam')
+  }
+
+  function showExam(exam: Exam) {
+    navigate('/created-exam', {state: { exam}})
+    console.log(exam)
   }
 
   return (
@@ -55,16 +62,17 @@ export function Dashboard() {
           {exams.map((exam) => (
             <div
               key={exam.id}
+              onClick={() => showExam(exam)}
               className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow"
             >
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-2 bg-indigo-100 rounded-lg">
                   <Book className="h-6 w-6 text-indigo-600" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900">{exam.title}</h3>
+                <h3 className="text-lg font-semibold text-gray-900">{exam.subject}</h3>
               </div>
               <div className="text-sm text-gray-500">
-                {exam.title} {exam.date === '' ? 'exam' : 'exams'}
+                {exam.title} {exam.date === '' ? 'Due' : 'Due'}
               </div>
             </div>
           ))}
