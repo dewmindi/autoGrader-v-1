@@ -13,6 +13,9 @@ export function ExamCreator() {
   const navigate = useNavigate()
   const [title, setTitle] = useState('')
   const [subject, setSubject] = useState('')
+  const [date, setDate] = useState('')
+  const [time, setTime] = useState("08:30")
+  const [duration, setDuration] = useState('')
   const [questions, setQuestions] = useState<Question[]>([
     {
       id: crypto.randomUUID(),
@@ -57,6 +60,8 @@ export function ExamCreator() {
       subject,
       questions,
       date: new Date().toISOString(),
+      time,
+      duration
     }
     const exams = JSON.parse(localStorage.getItem('exams') || '[]')
     localStorage.setItem('exams', JSON.stringify([...exams, exam]))
@@ -90,6 +95,48 @@ export function ExamCreator() {
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
               required
             />
+            <div className='grid grid-cols-3 gap-3 mb-4'>
+              <div>
+                  <label htmlFor="date" className="block text-lg font-medium text-gray-700">
+                    Date
+                  </label>
+                <input
+                  id="date"
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  className="py-1 px-4 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg"
+                />
+              </div>
+
+            <div>
+              <label htmlFor="time" className="block text-lg font-medium text-gray-700">
+                  Time
+              </label>
+              <input
+                id="time"
+                type="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                className="py-1 px-4 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg"
+              />
+            </div>
+
+          {/* Duration */}
+          <div>
+            <label htmlFor="duration" className="block text-lg font-medium text-gray-700">
+              Duration
+            </label>
+            <input
+              id="duration"
+              type="text"
+              value={duration}
+              onChange={(e) => setDuration(e.target.value)}
+              placeholder="00h 00m"
+              className="py-1 px-4 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg"
+            />
+          </div>
+            </div>
           </div>
 
           <div className="space-y-6">
