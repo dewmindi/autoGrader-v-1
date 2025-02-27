@@ -8,7 +8,7 @@ interface Evaluation {
   studentIndex: string
   examId: string
   examTitle: string
-  answers: string[]
+  studentAnswers: { [key: string]: string } // Change to a map of question IDs to answers
   attachments: string[]
   date: string
   score: number
@@ -18,6 +18,7 @@ interface Exam {
   id: string
   title: string
   questions: {
+    id: string
     text: string
     options: string[]
     correctOption: number
@@ -32,31 +33,41 @@ export function EvaluationResult() {
   const [score, setScore] = useState<number>(0)
 
   useEffect(() => {
+    if (!evaluationId) return
+
+    // Fetch evaluations from local storage
     const evaluations = JSON.parse(localStorage.getItem('evaluations') || '[]')
     const currentEvaluation = evaluations.find((e: Evaluation) => e.id === evaluationId)
     
     if (currentEvaluation) {
       setEvaluation(currentEvaluation)
       
+      // Fetch exams from local storage
       const exams = JSON.parse(localStorage.getItem('exams') || '[]')
       const relatedExam = exams.find((e: Exam) => e.id === currentEvaluation.examId)
       setExam(relatedExam)
 
-      // Calculate score
-      let correctAnswers = 0
-      currentEvaluation.answers.forEach((answer, index) => {
-        if (relatedExam && answer.trim().toLowerCase() === relatedExam.questions[index].options[relatedExam.questions[index].correctOption].toLowerCase()) {
-          correctAnswers++
-        }
-      })
-      const finalScore = (correctAnswers / relatedExam.questions.length) * 100
-      setScore(finalScore)
+      // Calculate score if answers are available
+      if (currentEvaluation.studentAnswers && relatedExam) {
+        let correctAnswers = 0
+        relatedExam.questions.forEach((question) => {
+          // Check if the student's answer matches the correct answer
+          if (
+            currentEvaluation.studentAnswers[question.id]?.trim().toLowerCase() ===
+            question.options[question.correctOption]?.toLowerCase()
+          ) {
+            correctAnswers++
+          }
+        })
+        const finalScore = (correctAnswers / relatedExam.questions.length) * 100
+        setScore(finalScore)
 
-      // Update evaluation with score
-      const updatedEvaluations = evaluations.map((e: Evaluation) => 
-        e.id === evaluationId ? { ...e, score: finalScore } : e
-      )
-      localStorage.setItem('evaluations', JSON.stringify(updatedEvaluations))
+        // Update evaluation with score in localStorage
+        const updatedEvaluations = evaluations.map((e: Evaluation) => 
+          e.id === evaluationId ? { ...e, score: finalScore } : e
+        )
+        localStorage.setItem('evaluations', JSON.stringify(updatedEvaluations))
+      }
     }
   }, [evaluationId])
 
@@ -94,7 +105,7 @@ export function EvaluationResult() {
 
           <div className="space-y-6">
             {exam.questions.map((question, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div key={question.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <div className="mb-4">
                   <h3 className="text-lg font-medium">Question {index + 1}</h3>
                   <p className="text-gray-600 mt-1">{question.text}</p>
@@ -103,7 +114,9 @@ export function EvaluationResult() {
                 <div className="space-y-4">
                   <div>
                     <p className="text-sm font-medium text-gray-700">Student's Answer:</p>
-                    <p className="mt-1 text-gray-900">{evaluation.answers[index] || 'No answer provided'}</p>
+                    <p className="mt-1 text-gray-900">
+                      {evaluation.studentAnswers[question.id] || 'No answer provided'}
+                    </p>
                   </div>
 
                   <div>
@@ -112,7 +125,7 @@ export function EvaluationResult() {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    {evaluation.answers[index]?.trim().toLowerCase() === 
+                    {evaluation.studentAnswers[question.id]?.trim().toLowerCase() === 
                       question.options[question.correctOption].toLowerCase() ? (
                       <>
                         <CheckCircle className="h-5 w-5 text-green-500" />

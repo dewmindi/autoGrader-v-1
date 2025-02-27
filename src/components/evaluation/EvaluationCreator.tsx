@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Header } from '../Header'
-import { ArrowBigLeft, ArrowLeftCircleIcon, Upload } from 'lucide-react'
+import { ArrowBigLeft, Upload } from 'lucide-react'
 
 interface Exam {
   id: string
@@ -10,12 +9,16 @@ interface Exam {
   questions: any[]
 }
 
+interface StudentAnswer {
+  [questionId: string]: string; // Object to map question IDs to answers
+}
+
 export function EvaluationCreator() {
   const navigate = useNavigate()
   const [studentIndex, setStudentIndex] = useState('')
   const [selectedExam, setSelectedExam] = useState('')
   const [exams, setExams] = useState<Exam[]>([])
-  const [answers, setAnswers] = useState<string[]>([])
+  const [studentAnswers, setStudentAnswers] = useState<StudentAnswer>({}) // To store student's answers
   const [attachments, setAttachments] = useState<string[]>([])
 
   useEffect(() => {
@@ -38,26 +41,28 @@ export function EvaluationCreator() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    
+  
     const selectedExamData = exams.find(exam => exam.id === selectedExam)
     if (!selectedExamData) return
-
+  
     const evaluation = {
       id: crypto.randomUUID(),
       studentIndex,
       examId: selectedExam,
       examTitle: selectedExamData.title,
-      answers,
+      studentAnswers, // Store the student's answers
       attachments,
       date: new Date().toISOString(),
       score: 0, // Will be calculated in result page
     }
-
+  
     const evaluations = JSON.parse(localStorage.getItem('evaluations') || '[]')
     localStorage.setItem('evaluations', JSON.stringify([...evaluations, evaluation]))
-    
+  
+    // Fix: Use evaluation.id here, not the entire object
     navigate(`/evaluation-result/${evaluation.id}`)
   }
+  
 
   const currentExam = exams.find(exam => exam.id === selectedExam)
 
@@ -121,11 +126,12 @@ export function EvaluationCreator() {
                         Student Answer
                       </label>
                       <textarea
-                        value={answers[index] || ''}
+                        value={studentAnswers[question.id] || ''}
                         onChange={(e) => {
-                          const newAnswers = [...answers]
-                          newAnswers[index] = e.target.value
-                          setAnswers(newAnswers)
+                          setStudentAnswers((prev) => ({
+                            ...prev,
+                            [question.id]: e.target.value, // Store answer with question ID
+                          }))
                         }}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
                         rows={3}

@@ -9,6 +9,11 @@ interface Question {
   attachment?: string
 }
 
+interface Answer {
+  id: string
+  text: string
+}
+
 export function ExamCreator() {
   const navigate = useNavigate()
   const [title, setTitle] = useState('')
@@ -22,32 +27,56 @@ export function ExamCreator() {
       text: '',
     },
   ])
+  
+  // Store answers separately, keyed by question id
+  const [answers, setAnswers] = useState<Record<string, Answer>>({
+    [questions[0].id]: { id: crypto.randomUUID(), text: '' }
+  })
 
   const handleAddQuestion = () => {
+    const newQuestionId = crypto.randomUUID()
     setQuestions([
       ...questions,
       {
-        id: crypto.randomUUID(),
+        id: newQuestionId,
         text: '',
       },
     ])
+    setAnswers({
+      ...answers,
+      [newQuestionId]: { id: crypto.randomUUID(), text: '' },
+    })
   }
 
   const handleRemoveQuestion = (id: string) => {
     setQuestions(questions.filter((q) => q.id !== id))
+    const updatedAnswers = { ...answers }
+    delete updatedAnswers[id]
+    setAnswers(updatedAnswers)
   }
 
-  const handleQuestionChange = (id: string, field: keyof Question, value: any) => {
+  const handleQuestionChange = (id: string, value: string) => {
     setQuestions(
-      questions.map((q) => (q.id === id ? { ...q, [field]: value } : q))
+      questions.map((q) => (q.id === id ? { ...q, text: value } : q))
     )
+  }
+
+  const handleAnswerChange = (questionId: string, value: string) => {
+    setAnswers({
+      ...answers,
+      [questionId]: { ...answers[questionId], text: value },
+    })
   }
 
   const handleFileUpload = async (questionId: string, file: File) => {
     const reader = new FileReader()
     reader.onload = (e) => {
       const base64 = e.target?.result as string
-      handleQuestionChange(questionId, 'attachment', base64)
+      setQuestions(
+        questions.map((q) =>
+          q.id === questionId ? { ...q, attachment: base64 } : q
+        )
+      )
     }
     reader.readAsDataURL(file)
   }
@@ -61,7 +90,8 @@ export function ExamCreator() {
       questions,
       date: new Date().toISOString(),
       time,
-      duration
+      duration,
+      answers,
     }
     const exams = JSON.parse(localStorage.getItem('exams') || '[]')
     localStorage.setItem('exams', JSON.stringify([...exams, exam]))
@@ -97,9 +127,9 @@ export function ExamCreator() {
             />
             <div className='grid grid-cols-3 gap-3 mb-4'>
               <div>
-                  <label htmlFor="date" className="block text-lg font-medium text-gray-700">
-                    Date
-                  </label>
+                <label htmlFor="date" className="block text-lg font-medium text-gray-700">
+                  Date
+                </label>
                 <input
                   id="date"
                   type="date"
@@ -109,33 +139,33 @@ export function ExamCreator() {
                 />
               </div>
 
-            <div>
-              <label htmlFor="time" className="block text-lg font-medium text-gray-700">
+              <div>
+                <label htmlFor="time" className="block text-lg font-medium text-gray-700">
                   Time
-              </label>
-              <input
-                id="time"
-                type="time"
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-                className="py-1 px-4 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg"
-              />
-            </div>
+                </label>
+                <input
+                  id="time"
+                  type="time"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  className="py-1 px-4 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg"
+                />
+              </div>
 
-          {/* Duration */}
-          <div>
-            <label htmlFor="duration" className="block text-lg font-medium text-gray-700">
-              Duration
-            </label>
-            <input
-              id="duration"
-              type="text"
-              value={duration}
-              onChange={(e) => setDuration(e.target.value)}
-              placeholder="00h 00m"
-              className="py-1 px-4 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg"
-            />
-          </div>
+              {/* Duration */}
+              <div>
+                <label htmlFor="duration" className="block text-lg font-medium text-gray-700">
+                  Duration
+                </label>
+                <input
+                  id="duration"
+                  type="text"
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                  placeholder="00h 00m"
+                  className="py-1 px-4 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg"
+                />
+              </div>
             </div>
           </div>
 
@@ -163,11 +193,24 @@ export function ExamCreator() {
                     placeholder="Question text"
                     value={question.text}
                     onChange={(e) =>
-                      handleQuestionChange(question.id, 'text', e.target.value)
+                      handleQuestionChange(question.id, e.target.value)
                     }
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
                     required
                   />
+
+                  {/* Render a single answer for each question */}
+                  <div className="space-y-2">
+                    <input
+                      type="text"
+                      placeholder="Answer text"
+                      value={answers[question.id]?.text || ''}
+                      onChange={(e) =>
+                        handleAnswerChange(question.id, e.target.value)
+                      }
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                    />
+                  </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">

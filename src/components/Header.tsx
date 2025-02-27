@@ -1,16 +1,19 @@
-import { BookOpen, Settings, LogOut, BookCheck } from 'lucide-react'
-import { Navigate, Route, Router, useNavigate } from 'react-router-dom'
+import { BookOpen, Settings, LogOut,} from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { EvaluationCreator } from './evaluation/EvaluationCreator'
+
 
 export function Header() {
-  const { user, logout } = useAuth()
+  const { user } = useAuth()
   const navigate = useNavigate()
 
   const handleLogout = () => {
-    logout()
-    navigate('/login')
+    localStorage.removeItem('isLoggedIn')
+    // If you stored user info as well:
+    // localStorage.removeItem('user')
+    navigate('/login') // Redirect to login page after logout
   }
+  
 
   return (
     <header className="w-full border-b bg-white">
