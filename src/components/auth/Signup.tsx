@@ -12,21 +12,14 @@ export function Signup() {
   const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      // Perform the signup logic
-      await signup(email, password, name)
-
-      // On successful signup, store the user as logged in
-      localStorage.setItem('isLoggedIn', 'true')
-
-      // Redirect to the dashboard or home page
-      navigate('/')
+      await signup(email, password, name);
+      alert('User registered successfully!');
     } catch (err) {
-      // Handle errors, like email already exists
-      setError('Email already exists')
+      alert(err.message || 'Signup failed');
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
