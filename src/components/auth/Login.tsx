@@ -12,9 +12,16 @@ export function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
     try {
+      // Attempt to login the user
       await login(email, password)
-      navigate('/')
+
+      // After login success, store the user or token in localStorage
+      localStorage.setItem('isLoggedIn', 'true')
+
+      // Ensure that the user is redirected to the dashboard (or home)
+      navigate('/', { replace: true })  // Use replace: true to avoid going back to the login page
     } catch (err) {
       setError('Invalid credentials')
     }

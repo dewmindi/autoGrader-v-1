@@ -14,9 +14,16 @@ export function Signup() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
+      // Perform the signup logic
       await signup(email, password, name)
+
+      // On successful signup, store the user as logged in
+      localStorage.setItem('isLoggedIn', 'true')
+
+      // Redirect to the dashboard or home page
       navigate('/')
     } catch (err) {
+      // Handle errors, like email already exists
       setError('Email already exists')
     }
   }
