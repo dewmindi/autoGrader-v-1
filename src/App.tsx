@@ -59,7 +59,7 @@ function App() {
               }
             />
             <Route
-              path="/evaluation-result/:evaluationId"
+              path="/test-result/"
               element={
                 <PrivateRoute>
                   <EvaluationResult />
