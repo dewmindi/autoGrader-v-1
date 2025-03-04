@@ -17,7 +17,7 @@ interface Exam {
   subject: string
   date: string
   totalQuestions: number
-  score: number
+  TotalStudents: number
   totalScore: number
   time: string
 }
@@ -43,7 +43,7 @@ export function DispResults() {
         subject: 'Math',
         date: '2025-03-15',
         totalQuestions: 50,
-        score: 45,
+        TotalStudents: 45,
         totalScore: 50,
         time: '9:00'
       },
@@ -54,7 +54,7 @@ export function DispResults() {
         subject: 'History',
         date: '2025-05-10',
         totalQuestions: 60,
-        score: 50,
+        TotalStudents: 50,
         totalScore: 60,
         time: '2:00'
       },
@@ -65,7 +65,7 @@ export function DispResults() {
         subject: 'Science',
         date: '2025-04-01',
         totalQuestions: 30,
-        score: 27,
+        TotalStudents: 27,
         totalScore: 30,
         time: '10:00'
       }
@@ -117,8 +117,8 @@ export function DispResults() {
 
               {/* Score & Total Score */}
               <div className="text-sm text-gray-700 mb-4">
-                <span className="font-semibold">Score: </span>
-                {exam.score} / {exam.totalScore}
+                <span className="font-semibold">TotalStudents: </span>
+                {exam.TotalStudents} / {exam.totalScore}
               </div>
 
               {/* Exam Details */}

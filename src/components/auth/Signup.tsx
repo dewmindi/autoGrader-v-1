@@ -21,7 +21,7 @@ export function Signup() {
       localStorage.setItem('isLoggedIn', 'true')
 
       // Redirect to the dashboard or home page
-      navigate('/')
+      navigate('/dashboard')
     } catch (err) {
       // Handle errors, like email already exists
       setError('Email already exists')

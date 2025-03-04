@@ -6,21 +6,19 @@ import { Dashboard } from './components/dashboard/Dashboard'
 import { ExamCreator } from './components/exam/ExamCreator'
 import { EvaluationCreator } from './components/evaluation/EvaluationCreator'
 import { EvaluationResult } from './components/evaluation/EvaluationResult'
-import { AuthProvider} from './contexts/AuthContext'
+import { AuthProvider } from './contexts/AuthContext'
 import { ExamDetails } from './components/exam/ExamDetails'
 import { DispResults } from './components/studentResults/DispResults'
+import Home from './components/Homepage/Homepage'
 
 // PrivateRoute component to protect routes
 function PrivateRoute({ children }: { children: React.ReactNode }) {
-  // Check if the user is logged in from localStorage
-  const isLoggedIn = localStorage.getItem('isLoggedIn')
-  
-  // If the user is not logged in, redirect them to the login page
-  if (isLoggedIn !== 'true') {
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'
+
+  if (!isLoggedIn) {
     return <Navigate to="/login" replace />
   }
 
-  // If logged in, render the protected route
   return <>{children}</>
 }
 
@@ -33,10 +31,13 @@ function App() {
             {/* Public Routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            
+
+            {/* Default Route to Homepage */}
+            <Route path="/" element={<Home />} />
+
             {/* Protected Routes */}
             <Route
-              path="/"
+              path="/dashboard"
               element={
                 <PrivateRoute>
                   <Dashboard />
@@ -52,7 +53,7 @@ function App() {
               }
             />
             <Route
-              path="evaluate"
+              path="/evaluate"
               element={
                 <PrivateRoute>
                   <EvaluationCreator />
@@ -71,15 +72,15 @@ function App() {
               path="/created-exam"
               element={
                 <PrivateRoute>
-                  <ExamDetails/>
+                  <ExamDetails />
                 </PrivateRoute>
               }
             />
             <Route
-              path="display-results"
+              path="/display-results"
               element={
                 <PrivateRoute>
-                  <DispResults/>
+                  <DispResults />
                 </PrivateRoute>
               }
             />

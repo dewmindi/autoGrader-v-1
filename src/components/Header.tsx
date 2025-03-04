@@ -7,7 +7,8 @@ export function Header() {
 
   const handleLogout = () => {
     logout()
-    navigate('/login')
+    localStorage.removeItem('isLoggedIn') 
+    navigate('/')
   }
 
   return (
@@ -18,7 +19,7 @@ export function Header() {
           <h1 className="text-xl font-bold text-gray-900">AutoGrader</h1>
         </div>
         <div className="flex items-center gap-4">
-          <Link to='/'>{user && <span className="text-gray-600">{user.name}</span>}</Link>
+          <Link to='/dashboard'>{user && <span className="text-gray-600">{user.name}</span>}</Link>
           <Link to="/evaluate">
           <button 
           className="p-2 hover:bg-gray-100 rounded-full transition-colors">

@@ -121,6 +121,7 @@ export function EvaluationCreator() {
   };
 
   const currentExam = exams.find((exam) => exam.id === selectedExam);
+  console.log(currentExam);
 
   return (
     <div>

@@ -21,7 +21,7 @@ export function Login() {
       localStorage.setItem('isLoggedIn', 'true')
 
       // Ensure that the user is redirected to the dashboard (or home)
-      navigate('/', { replace: true })  // Use replace: true to avoid going back to the login page
+      navigate('/dashboard', { replace: true })  // Use replace: true to avoid going back to the login page
     } catch (err) {
       setError('Invalid credentials')
     }
