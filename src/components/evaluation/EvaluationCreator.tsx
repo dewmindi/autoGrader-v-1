@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowBigLeft, Upload } from 'lucide-react';
+import { Header } from '../Header';
 
 interface Exam {
   id: string;
@@ -123,6 +124,7 @@ export function EvaluationCreator() {
 
   return (
     <div>
+      <Header />
       <ArrowBigLeft onClick={() => navigate('/')} />
       <main className="container mx-auto px-4 py-8">
         <form onSubmit={handleSubmit} className="max-w-3xl mx-auto space-y-8">

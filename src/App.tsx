@@ -8,6 +8,7 @@ import { EvaluationCreator } from './components/evaluation/EvaluationCreator'
 import { EvaluationResult } from './components/evaluation/EvaluationResult'
 import { AuthProvider} from './contexts/AuthContext'
 import { ExamDetails } from './components/exam/ExamDetails'
+import { DispResults } from './components/studentResults/DispResults'
 
 // PrivateRoute component to protect routes
 function PrivateRoute({ children }: { children: React.ReactNode }) {
@@ -51,7 +52,7 @@ function App() {
               }
             />
             <Route
-              path="/evaluate"
+              path="evaluate"
               element={
                 <PrivateRoute>
                   <EvaluationCreator />
@@ -71,6 +72,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <ExamDetails/>
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="display-results"
+              element={
+                <PrivateRoute>
+                  <DispResults/>
                 </PrivateRoute>
               }
             />

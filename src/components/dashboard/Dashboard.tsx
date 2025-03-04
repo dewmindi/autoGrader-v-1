@@ -17,6 +17,7 @@ interface Exam {
   date: string
   totalQuestions: number
   answer: String
+  time: String
 }
 
 export function Dashboard() {
@@ -72,7 +73,7 @@ export function Dashboard() {
                 <h3 className="text-lg font-semibold text-gray-900">{exam.subject}</h3>
               </div>
               <div className="text-sm text-gray-500">
-                {exam.title} {exam.date === '' ? 'Due' : 'Due'}
+                {exam.title} {exam.time === '' ? 'Due' : exam.time + "A.M"}
               </div>
             </div>
           ))}

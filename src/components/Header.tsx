@@ -1,8 +1,6 @@
 import { BookOpen, Settings, LogOut, BookCheck } from 'lucide-react'
-import { Navigate, Route, Router, useNavigate } from 'react-router-dom'
+import { Navigate, Route, Router, useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { EvaluationCreator } from './evaluation/EvaluationCreator'
-
 export function Header() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
@@ -20,14 +18,16 @@ export function Header() {
           <h1 className="text-xl font-bold text-gray-900">AutoGrader</h1>
         </div>
         <div className="flex items-center gap-4">
-          {user && <span className="text-gray-600">{user.name}</span>}
-          <button onClick={() => navigate('evaluate')}
+          <Link to='/'>{user && <span className="text-gray-600">{user.name}</span>}</Link>
+          <Link to="/evaluate">
+          <button 
           className="p-2 hover:bg-gray-100 rounded-full transition-colors">
             Evaluate
           </button>
-          <button onClick={() => navigate('/evaluation-result/:evaluationId')}>
+          </Link>
+          <Link to="/display-results" className="results-button">
             Results
-          </button>
+          </Link>
           <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
             <Settings className="h-5 w-5 text-gray-600" />
           </button>
