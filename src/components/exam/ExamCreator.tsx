@@ -95,7 +95,7 @@ export function ExamCreator() {
     }
     const exams = JSON.parse(localStorage.getItem('exams') || '[]')
     localStorage.setItem('exams', JSON.stringify([...exams, exam]))
-    navigate('/')
+    navigate('/dashboard')
   }
 
   return (

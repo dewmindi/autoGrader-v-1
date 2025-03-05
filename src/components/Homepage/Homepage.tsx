@@ -1,5 +1,4 @@
 import './index.css'
-import React from 'react';
 import { Link } from 'react-router-dom'
 import { WavyBackground } from '../../components/ui/wavy-background'
 
@@ -8,10 +7,11 @@ export default function Home() {
     <div className="min-h-screen bg-gray-50">
       {/* Homepage */}
       <WavyBackground className="max-w-4xl mx-auto pb-40">
+       <div>
         <p className="mt-10 text-6xl md:text-6xl lg:text-7xl text-white font-bold inter-var text-center">
           AutoGrader
         </p>
-        <p className="mt-10 text-base md:text-xl mt-4 text-white font-normal inter-var text-center">
+        <p className="mt-10 text-base md:text-xl text-white font-normal inter-var text-center">
           Revolutionizing Academic Grading with Intelligent Automation and Precision
         </p>
         <div className="mt-10  flex flex-col md:flex-row space-y-4 md:space-y-0 space-x-0 md:space-x-4 justify-center">
@@ -33,6 +33,7 @@ export default function Home() {
             </p>
           </footer>
         </div>
+        </div> 
       </WavyBackground>   
     </div>
   )

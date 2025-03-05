@@ -126,7 +126,7 @@ export function EvaluationCreator() {
   return (
     <div>
       <Header />
-      <ArrowBigLeft onClick={() => navigate('/')} />
+      <ArrowBigLeft onClick={() => navigate('/dashboard')} />
       <main className="container mx-auto px-4 py-8">
         <form onSubmit={handleSubmit} className="max-w-3xl mx-auto space-y-8">
           <div>

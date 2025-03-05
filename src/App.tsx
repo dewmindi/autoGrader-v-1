@@ -10,6 +10,8 @@ import { AuthProvider } from './contexts/AuthContext'
 import { ExamDetails } from './components/exam/ExamDetails'
 import { DispResults } from './components/studentResults/DispResults'
 import Home from './components/Homepage/Homepage'
+import { StudentResults } from './components/studentResults/showStudentList'
+
 
 // PrivateRoute component to protect routes
 function PrivateRoute({ children }: { children: React.ReactNode }) {
@@ -81,6 +83,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <DispResults />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/display-students"
+              element={
+                <PrivateRoute>
+                  <StudentResults />
                 </PrivateRoute>
               }
             />

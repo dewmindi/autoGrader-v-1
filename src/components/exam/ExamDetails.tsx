@@ -50,7 +50,7 @@ export function ExamDetails() {
 
         {/* Button */}
         <div className="mt-8 flex justify-center">
-            <Link to="/">
+            <Link to="/dashboard">
                 <button  className="px-6 py-2 text-white bg-indigo-600 hover:bg-indigo-700 rounded-full font-semibold shadow-md transition duration-300">
                   Go Back
                 </button>

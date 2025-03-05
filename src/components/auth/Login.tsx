@@ -34,7 +34,7 @@ export function Login() {
           <div className="flex justify-center">
             <BookOpen className="h-12 w-12 text-indigo-600" />
           </div>
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">Sign in to GradeWise</h2>
+          <h2 className="mt-6 text-3xl font-bold text-gray-900">Sign in to AutoGrader</h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && <div className="text-red-500 text-center">{error}</div>}

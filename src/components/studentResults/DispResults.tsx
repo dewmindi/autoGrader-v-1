@@ -75,19 +75,15 @@ export function DispResults() {
     setExams(dummyExams)
   }, [])
 
-  const handleCreateExam = () => {
-    navigate('/create-exam')
-  }
-
-  function showExam(exam: Exam) {
-    navigate('/created-exam', { state: { exam } })
+  function showStudent(exam: Exam) {
+    navigate('/display-students', { state: { exam } })
     console.log(exam)
   }
 
   return (
     <div>
       <Header />
-      <ArrowBigLeft onClick={() => navigate('/')} />
+      <ArrowBigLeft onClick={() => navigate('/dashboard')} />
       <main className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
           <div>
@@ -100,7 +96,7 @@ export function DispResults() {
           {exams.map((exam) => (
             <div
               key={exam.id}
-              onClick={() => showExam(exam)}
+              onClick={() => showStudent(exam)}
               className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow"
             >
               <div className="flex items-center gap-3 mb-4">
